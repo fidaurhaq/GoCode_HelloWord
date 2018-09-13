@@ -4,9 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/fidaurhaq/todographqlspec"
+	"github.com/fidaurhaq/gotodographqlspec"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
+	"github.com/rs/cors"
 )
 
 var schema *graphql.Schema
@@ -16,14 +17,18 @@ func init() {
 }
 
 func main() {
-	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux :=  http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
-	}))
+	})
+	
+	mux.Handle("/query", &relay.Handler{Schema: schema})
 
-	http.Handle("/query", &relay.Handler{Schema: schema})
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	handler := cors.Default().Handler(mux)
+	
+	log.Fatal(http.ListenAndServe(":8080", handler))
 }
+
 
 var page = []byte(`
 <!DOCTYPE html>
