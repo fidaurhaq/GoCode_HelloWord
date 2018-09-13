@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/fidaurhaq/todoGraphqlSpec"
+	"github.com/fidaurhaq/todographqlspec"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 )
